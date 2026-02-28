@@ -12,6 +12,9 @@ class IndiaTerminalAPI {
             weather: 'https://api.openweathermap.org/data/2.5'
         };
         
+        // Load environment variables
+        this.env = {};
+        
         this.apiKeys = {
             // User needs to register for these free API keys
             newsAPI: 'YOUR_NEWSAPI_KEY',
@@ -19,8 +22,39 @@ class IndiaTerminalAPI {
             openWeather: 'YOUR_OPENWEATHER_KEY'
         };
         
+        // Load env and update keys
+        this.loadEnv().then(() => {
+            if (this.env.NEWS_API_KEY) {
+                this.apiKeys.newsAPI = this.env.NEWS_API_KEY;
+                console.log('NewsAPI key loaded from .env');
+            }
+        });
+        
         this.cache = new Map();
         this.cacheTimeout = 5 * 60 * 1000; // 5 minutes
+    }
+
+    // Load environment variables from .env file
+    async loadEnv() {
+        try {
+            const response = await fetch('.env');
+            const text = await response.text();
+            const lines = text.split('\n');
+            
+            lines.forEach(line => {
+                line = line.trim();
+                if (line && !line.startsWith('#')) {
+                    const [key, ...valueParts] = line.split('=');
+                    if (key && valueParts.length > 0) {
+                        this.env[key.trim()] = valueParts.join('=').trim();
+                    }
+                }
+            });
+            
+            console.log('Environment variables loaded:', Object.keys(this.env));
+        } catch (error) {
+            console.log('No .env file found or error loading it:', error.message);
+        }
     }
 
     // Generic fetch with caching
@@ -505,20 +539,30 @@ class IndiaTerminalAPI {
     // Update ticker with real-time data
     async updateTickerWithLiveData() {
         // Get data from APIs that work WITHOUT keys
-        const [economicData, govSchemes, rssNews] = await Promise.all([
+        const [economicData, govSchemes, rssNews, politicalNews] = await Promise.all([
             this.getEconomicData(), // WORKING - World Bank
             this.getGovernmentSchemes(), // WORKING - Data.gov.in
-            this.getRSSNews() // WORKING - RSS feeds
+            this.getRSSNews(), // WORKING - RSS feeds
+            this.getPoliticalNews() // WORKING - NewsAPI with key
         ]);
         
-        const tickerItems = [
-            `📊 GDP: ${economicData.gdpGrowth ? economicData.gdpGrowth.toFixed(2) + '%' : 'N/A'} (${economicData.source})`,
-            `📈 Inflation: ${economicData.inflation ? economicData.inflation.toFixed(2) + '%' : 'N/A'}`,
-            `👥 Population: ${economicData.population ? (economicData.population / 1000000000).toFixed(2) + 'B' : 'N/A'}`,
-            `🏛️ Govt Schemes: ${govSchemes.totalSchemes || 0} schemes | ₹${(govSchemes.totalBudgetInCrores || 0).toLocaleString('en-IN')} Cr`,
-            `📰 RSS: ${rssNews.articles[0]?.title || 'Loading...'}`,
-            `⏰ Updated: ${new Date().toLocaleTimeString('en-IN')}`
-        ];
+        const tickerItems = [];
+        
+        // Add latest political news (up to 5 headlines)
+        if (politicalNews && politicalNews.length > 0) {
+            politicalNews.slice(0, 5).forEach(article => {
+                tickerItems.push(`📰 ${article.title}`);
+            });
+        } else {
+            tickerItems.push('📰 Loading latest news...');
+        }
+        
+        // Add some economic indicators for context
+        tickerItems.push(`📊 GDP: ${economicData.gdpGrowth ? economicData.gdpGrowth.toFixed(2) + '%' : 'N/A'}`);
+        tickerItems.push(`📈 Inflation: ${economicData.inflation ? economicData.inflation.toFixed(2) + '%' : 'N/A'}`);
+        
+        // Add update time
+        tickerItems.push(`⏰ Updated: ${new Date().toLocaleTimeString('en-IN')}`);
         
         return tickerItems;
     }
@@ -526,18 +570,20 @@ class IndiaTerminalAPI {
     // Get comprehensive dashboard data
     async getDashboardData() {
         // Get data from APIs that work WITHOUT keys
-        const [economic, govSchemes, rssNews] = await Promise.all([
+        const [economic, govSchemes, rssNews, politicalNews] = await Promise.all([
             this.getEconomicData(), // WORKING - World Bank
             this.getGovernmentSchemes(), // WORKING - Data.gov.in
-            this.getRSSNews() // WORKING - RSS feeds
+            this.getRSSNews(), // WORKING - RSS feeds
+            this.getPoliticalNews() // WORKING - NewsAPI with key
         ]);
         
         return {
             economic, // Real GDP, inflation, population data
             govSchemes, // Government schemes and programs
             rssNews, // News from RSS feeds
+            politicalNews, // Latest political news from NewsAPI
             lastUpdated: new Date().toISOString(),
-            sources: ['World Bank', 'Data.gov.in', 'RSS Feeds']
+            sources: ['World Bank', 'Data.gov.in', 'RSS Feeds', 'NewsAPI']
         };
     }
 
