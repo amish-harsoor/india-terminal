@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INDIA TERMINAL — Political Intelligence Platform</title>
+  <link rel="stylesheet" href="css/terminal.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100'/><text y='75' x='10' font-size='70' font-weight='900' fill='%23ff6600'>IN</text></svg>">
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-logo">INDIA TERMINAL</div>
+  <div class="loading-sub">POLITICAL INTELLIGENCE SYSTEM</div>
+  <div class="loading-bar-container">
+    <div class="loading-bar"></div>
+  </div>
+  <div class="loading-text blinking">INITIALIZING DATABASE... LOADING 1947–2024</div>
+</div>
+
+<!-- HEADER -->
+<div id="terminal-header">
+  <div class="header-logo">INDIA TERMINAL</div>
+  <div class="header-subtitle">▸ POLITICAL INTELLIGENCE &amp; HISTORICAL DATA PLATFORM</div>
+
+  <div class="header-nav">
+    <button class="nav-btn active" data-screen="dashboard" onclick="navigateTo('dashboard')">
+      <span style="color:#ff6600;">F1</span> DASH
+    </button>
+    <button class="nav-btn" data-screen="pm" onclick="navigateTo('pm')">
+      <span style="color:#ff6600;">F2</span> PMs
+    </button>
+    <button class="nav-btn" data-screen="elections" onclick="navigateTo('elections')">
+      <span style="color:#ff6600;">F3</span> ELECT
+    </button>
+    <button class="nav-btn" data-screen="parties" onclick="navigateTo('parties')">
+      <span style="color:#ff6600;">F4</span> PARTY
+    </button>
+    <button class="nav-btn" data-screen="events" onclick="navigateTo('events')">
+      <span style="color:#ff6600;">F5</span> EVENT
+    </button>
+    <button class="nav-btn" data-screen="parliament" onclick="navigateTo('parliament')">
+      <span style="color:#ff6600;">F6</span> PARL
+    </button>
+    <button class="nav-btn" data-screen="scandals" onclick="navigateTo('scandals')">
+      <span style="color:#ff6600;">F7</span> SCNDL
+    </button>
+    <button class="nav-btn" data-screen="amendments" onclick="navigateTo('amendments')">
+      <span style="color:#ff6600;">F8</span> AMEND
+    </button>
+    <button class="nav-btn" data-screen="search" onclick="navigateTo('search')">
+      <span style="color:#ff6600;">F9</span> SRCH
+    </button>
+    <button class="nav-btn" data-screen="electoral-bonds" onclick="navigateTo('electoral-bonds')">
+      <span style="color:#ff6600;">F10</span> BONDS
+    </button>
+    <button class="nav-btn" data-screen="sentiment" onclick="navigateTo('sentiment')">
+      <span style="color:#ff6600;">F11</span> SENTIMENT
+    </button>
+  </div>
+
+  <div id="search-bar" style="margin-left:8px;padding:0;border:none;background:transparent;flex:1;display:flex;gap:4px;align-items:center;">
+    <span class="search-label">CMD▸</span>
+    <input id="search-input" type="text" placeholder="Search India Politics... (Enter to search)">
+  </div>
+
+  <div class="header-clock">
+    <div class="clock-item">
+      <div class="clock-label">IST</div>
+      <div class="clock-val" id="clock-ist">00:00:00</div>
+    </div>
+    <div class="clock-item">
+      <div class="clock-label">DATE</div>
+      <div class="clock-val" id="clock-date">---</div>
+    </div>
+    <div class="clock-item">
+      <div class="clock-label">INDIA INC</div>
+      <div class="clock-val" style="color:var(--green);">◆ ACTIVE</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEWS TICKER -->
+<div id="ticker-bar">
+  <div class="ticker-label">◆ INDIA POLITICS</div>
+  <div class="ticker-scroll">
+    <div class="ticker-inner" id="ticker-inner"></div>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div id="main-container">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar"></div>
+
+  <!-- CONTENT AREA -->
+  <div id="content-area" style="flex:1;overflow:hidden;display:flex;flex-direction:column;"></div>
+
+</div>
+
+<!-- FUNCTION KEYS BAR -->
+<div id="function-keys">
+  <div style="color:var(--gray-3);font-size:8px;margin-right:8px;">KEYBOARD:</div>
+  <button class="fkey" onclick="navigateTo('dashboard')"><span class="fk-num">F1</span>DASHBOARD</button>
+  <button class="fkey" onclick="navigateTo('pm')"><span class="fk-num">F2</span>PRIME MINISTERS</button>
+  <button class="fkey" onclick="navigateTo('elections')"><span class="fk-num">F3</span>ELECTIONS</button>
+  <button class="fkey" onclick="navigateTo('parties')"><span class="fk-num">F4</span>PARTIES</button>
+  <button class="fkey" onclick="navigateTo('events')"><span class="fk-num">F5</span>EVENTS TIMELINE</button>
+  <button class="fkey" onclick="navigateTo('parliament')"><span class="fk-num">F6</span>PARLIAMENT 2024</button>
+  <button class="fkey" onclick="navigateTo('cm')"><span class="fk-num">F7</span>CHIEF MINISTERS</button>
+  <button class="fkey" onclick="navigateTo('scandals')"><span class="fk-num">F8</span>SCANDALS</button>
+  <button class="fkey" onclick="navigateTo('search')"><span class="fk-num">F9</span>SEARCH</button>
+  <button class="fkey" onclick="navigateTo('electoral-bonds')"><span class="fk-num">F10</span>ELECTORAL BONDS</button>
+  <button class="fkey" onclick="navigateTo('sentiment')"><span class="fk-num">F11</span>SENTIMENT HEATMAP</button>
+  <div style="margin-left:auto;color:var(--orange);font-size:8px;letter-spacing:1px;">INDIA TERMINAL v2.0 · DATA: 1947-2024 · ALL RIGHTS RESERVED</div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="data/politics.js"></script>
+<script src="data/electoral-bonds.js"></script>
+<script src="data/political-funding.js"></script>
+<script src="js/api-integration.js"></script>
+<script src="js/terminal.js"></script>
+
+</body>
+</html>
