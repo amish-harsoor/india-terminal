@@ -132,6 +132,11 @@ body {
   font-weight: 700;
 }
 
+/* Sidebar toggle button - hidden by default */
+#sidebar-toggle {
+  display: none;
+}
+
 .header-clock {
   margin-left: auto;
   display: flex;
@@ -687,7 +692,6 @@ canvas.chart-canvas {
 
 /* ============ ELECTION RESULTS TABLE ============ */
 .elec-row-win { background: #001a00; }
-.elec-row-loss { }
 
 /* ============ SEARCH BAR ============ */
 #search-bar {
@@ -927,4 +931,368 @@ canvas.chart-canvas {
   color: #000;
   border-color: var(--orange);
   font-weight: 700;
+}
+
+/* ============ MOBILE RESPONSIVE ============ */
+@media (max-width: 600px) {
+  /* Show sidebar toggle button */
+  #sidebar-toggle {
+    display: flex !important;
+  }
+
+  /* Main container full width when sidebar hidden */
+  #main-container.sidebar-hidden {
+    display: block;
+  }
+
+  /* Adjust header for mobile */
+  #terminal-header {
+    height: auto;
+    padding: 4px 8px;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: space-between;
+  }
+
+  #terminal-header > :first-child {
+    order: 1;
+  }
+
+  #terminal-header > :nth-child(2) {
+    order: 2;
+    flex: 1;
+    min-width: 0;
+  }
+
+  #terminal-header > :nth-child(3) {
+    order: 3;
+  }
+
+  #terminal-header > :nth-child(4) {
+    order: 4;
+  }
+
+  #terminal-header > :nth-child(5) {
+    order: 5;
+  }
+
+  #terminal-header > :nth-child(6) {
+    order: 6;
+    margin-left: auto;
+  }
+
+  .header-nav {
+    display: none; /* Hide nav buttons on mobile, use function keys */
+  }
+
+  .header-clock {
+    margin-left: auto;
+    gap: 8px;
+  }
+
+  .clock-item {
+    font-size: var(--tiny);
+  }
+
+  .clock-label {
+    font-size: 7px;
+  }
+
+  .clock-val {
+    font-size: var(--tiny);
+  }
+
+  /* Ticker smaller */
+  #ticker-bar {
+    height: 18px;
+  }
+
+  .ticker-label {
+    font-size: var(--tiny);
+    padding: 0 6px;
+  }
+
+  .ticker-scroll {
+    font-size: 8px;
+  }
+
+  /* Main container adjustments */
+  #main-container {
+    height: calc(100vh - 68px);
+  }
+
+  /* Sidebar when shown on mobile */
+  #sidebar:not(.mobile-hidden) {
+    display: block;
+    position: fixed;
+    top: 68px;
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 68px);
+    z-index: 1000;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    transition: left 0.3s ease;
+  }
+
+  /* Sidebar when hidden on mobile - positioned off-screen */
+  #sidebar.mobile-hidden {
+    display: block;
+    position: fixed;
+    top: 68px;
+    left: -250px;
+    width: 250px;
+    height: calc(100vh - 68px);
+    z-index: 1000;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    transition: left 0.3s ease;
+  }
+
+  /* Content area adjustments */
+  #content-area {
+    width: 100%;
+    transition: margin-left 0.3s ease;
+  }
+
+  /* When sidebar is hidden, content takes full width */
+  #main-container.sidebar-hidden #content-area {
+    margin-left: 0;
+  }
+
+  /* When sidebar is shown, content shifts right */
+  #main-container:not(.sidebar-hidden) #content-area {
+    margin-left: 250px;
+  }
+
+  /* Function keys bar scrollable */
+  #function-keys {
+    height: auto;
+    padding: 2px 4px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  #function-keys::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fkey {
+    flex-shrink: 0;
+    margin-right: 4px;
+  }
+
+  /* Increase font sizes for mobile */
+  body {
+    font-size: 12px;
+  }
+
+  :root {
+    --h1: 16px;
+    --h2: 14px;
+    --body: 12px;
+    --small: 11px;
+    --tiny: 10px;
+  }
+
+  .header-logo {
+    font-size: 12px;
+    padding: 1px 6px;
+  }
+
+  .header-subtitle {
+    font-size: var(--small);
+  }
+
+  .panel-title {
+    font-size: var(--tiny);
+  }
+
+  .panel-meta {
+    font-size: 8px;
+  }
+
+  /* Table adjustments */
+  .bt-table {
+    font-size: var(--tiny);
+  }
+
+  .bt-table td {
+    padding: 3px 4px;
+    max-width: 80px;
+  }
+
+  .td-name {
+    max-width: 100px;
+  }
+
+  /* Stat cards adjustments */
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 2px;
+    padding: 2px;
+  }
+
+  .stat-card {
+    padding: 4px 6px;
+  }
+
+  .stat-label {
+    font-size: 8px;
+  }
+
+  .stat-value {
+    font-size: 16px;
+  }
+
+  .stat-sub {
+    font-size: var(--tiny);
+  }
+
+  /* Bar charts smaller */
+  .bar-row {
+    margin-bottom: 4px;
+    font-size: var(--tiny);
+  }
+
+  .bar-label {
+    min-width: 60px;
+  }
+
+  .bar-track {
+    height: 12px;
+  }
+
+  .bar-value {
+    min-width: 30px;
+  }
+
+  /* Timeline items */
+  .timeline-item {
+    padding: 4px 5px;
+    gap: 6px;
+  }
+
+  .timeline-date {
+    min-width: 60px;
+  }
+
+  .timeline-content {
+    flex: 1;
+  }
+
+  .timeline-title {
+    font-size: var(--body);
+  }
+
+  .timeline-desc {
+    font-size: var(--tiny);
+  }
+
+  /* PM detail cards */
+  .pm-card {
+    padding: 8px;
+    margin: 2px;
+  }
+
+  .pm-name {
+    font-size: 12px;
+  }
+
+  .pm-field-val {
+    font-size: var(--small);
+  }
+
+  /* Parliament donut */
+  .parliament-view {
+    flex-direction: column;
+    padding: 4px;
+  }
+
+  .donut-container {
+    order: 2;
+  }
+
+  .parliament-legend {
+    order: 1;
+    margin-bottom: 8px;
+  }
+
+  /* Search bar */
+  #search-bar {
+    padding: 2px 6px;
+  }
+
+  .search-label {
+    font-size: var(--small);
+  }
+
+  #search-input {
+    font-size: var(--body);
+    padding: 2px 4px;
+  }
+
+  /* Loading screen */
+  .loading-logo {
+    font-size: 24px;
+  }
+
+  .loading-sub {
+    font-size: 10px;
+  }
+
+  /* Dashboard grid adjustments */
+  #screen-dashboard .stat-grid:first-child {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  /* Main grid single column on mobile */
+  #screen-dashboard > div:last-child {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto;
+  }
+
+  #screen-dashboard > div:last-child > div:first-child {
+    order: 2;
+  }
+
+  #screen-dashboard > div:last-child > div:nth-child(2) {
+    order: 3;
+  }
+
+  #screen-dashboard > div:last-child > div:nth-child(3) {
+    order: 1;
+  }
+
+  /* Bottom row single column */
+  #screen-dashboard > div:last-child > div:last-child {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens */
+  body {
+    font-size: 11px;
+  }
+
+  :root {
+    --body: 11px;
+    --small: 10px;
+    --tiny: 9px;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-card {
+    padding: 3px 4px;
+  }
+
+  .stat-value {
+    font-size: 14px;
+  }
 }

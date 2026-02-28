@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>INDIA TERMINAL — Political Intelligence Platform</title>
-  <link rel="stylesheet" href="css/terminal.css">
+  <link rel="stylesheet" href="css/terminal.css?v=1">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100'/><text y='75' x='10' font-size='70' font-weight='900' fill='%23ff6600'>IN</text></svg>">
 </head>
 <body>
@@ -23,6 +23,10 @@
 <div id="terminal-header">
   <div class="header-logo">INDIA TERMINAL</div>
   <div class="header-subtitle">▸ POLITICAL INTELLIGENCE &amp; HISTORICAL DATA PLATFORM</div>
+
+  <button id="sidebar-toggle" class="nav-btn" onclick="toggleSidebar()">
+    <span style="color:#ff6600;">☰</span> MENU
+  </button>
 
   <div class="header-nav">
     <button class="nav-btn active" data-screen="dashboard" onclick="navigateTo('dashboard')">
@@ -121,8 +125,8 @@
 <script src="data/politics.js"></script>
 <script src="data/electoral-bonds.js"></script>
 <script src="data/political-funding.js"></script>
-<script src="js/api-integration.js"></script>
-<script src="js/terminal.js"></script>
+<script src="js/api-integration.js?v=1"></script>
+<script src="js/terminal.js?v=1"></script>
 
 </body>
 </html>

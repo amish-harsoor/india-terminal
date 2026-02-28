@@ -34,9 +34,29 @@ function initTerminal() {
   initSearch();
   initKeyboard();
   
+  // Initialize mobile sidebar state
+  updateMobileSidebarState();
+  
+  // Add resize listener for responsive behavior
+  window.addEventListener('resize', updateMobileSidebarState);
+  
   // Start real-time API updates if available
   if (window.startRealTimeUpdates) {
     startRealTimeUpdates();
+  }
+}
+
+function updateMobileSidebarState() {
+  const sidebar = document.getElementById('sidebar');
+  const mainContainer = document.getElementById('main-container');
+  const isMobile = window.innerWidth < 768;
+  
+  if (isMobile) {
+    sidebar.classList.add('mobile-hidden');
+    mainContainer.classList.add('sidebar-hidden');
+  } else {
+    sidebar.classList.remove('mobile-hidden');
+    mainContainer.classList.remove('sidebar-hidden');
   }
 }
 
@@ -208,7 +228,24 @@ function navigateTo(screenKey) {
   else if (screenKey === 'search') renderSearch();
   else if (screenKey === 'correlation') renderCorrelation();
   else if (screenKey === 'political-funding') renderPoliticalFunding();
-  else if (screenKey === 'sentiment') renderSentiment();
+  else if (screenKey.startsWith('sentiment')) renderSentiment();
+}
+
+// ============ SIDEBAR TOGGLE ============
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const mainContainer = document.getElementById('main-container');
+  const toggleBtn = document.getElementById('sidebar-toggle');
+
+  if (sidebar.classList.contains('mobile-hidden')) {
+    sidebar.classList.remove('mobile-hidden');
+    mainContainer.classList.remove('sidebar-hidden');
+    toggleBtn.innerHTML = '<span style="color:#ff6600;">☰</span> HIDE';
+  } else {
+    sidebar.classList.add('mobile-hidden');
+    mainContainer.classList.add('sidebar-hidden');
+    toggleBtn.innerHTML = '<span style="color:#ff6600;">☰</span> MENU';
+  }
 }
 
 // ============ DASHBOARD ============
