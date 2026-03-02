@@ -1021,6 +1021,58 @@ canvas.chart-canvas {
     height: calc(100vh - 68px);
   }
 
+  /* Dashboard: stack sections vertically and allow scrolling */
+  #screen-dashboard {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #screen-dashboard .dashboard-main-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+    gap: 1px;
+    overflow: visible !important;
+    min-height: unset !important;
+  }
+
+  #screen-dashboard .dashboard-col2 {
+    gap: 1px;
+  }
+
+  #screen-dashboard .dashboard-bottom-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1px;
+  }
+
+  /* Let panels determine their own height on phone; avoid clipped scrolling */
+  #screen-dashboard .panel-body {
+    max-height: none !important;
+  }
+
+  /* Increase touch targets for mobile */
+  .nav-btn, #sidebar-toggle, .fkey {
+    min-height: 44px; /* iOS recommended minimum */
+    min-width: 44px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  #sidebar-toggle {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .fkey {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .sidebar-item {
+    min-height: 48px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
   /* Sidebar when shown on mobile */
   #sidebar:not(.mobile-hidden) {
     display: block;
@@ -1032,7 +1084,8 @@ canvas.chart-canvas {
     z-index: 1000;
     background: var(--bg-panel);
     border-right: 1px solid var(--border);
-    transition: left 0.3s ease;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
   }
 
   /* Sidebar when hidden on mobile - positioned off-screen */
@@ -1046,7 +1099,27 @@ canvas.chart-canvas {
     z-index: 1000;
     background: var(--bg-panel);
     border-right: 1px solid var(--border);
-    transition: left 0.3s ease;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+  }
+
+  /* Backdrop overlay for mobile sidebar */
+  #sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 68px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 68px);
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  #sidebar-backdrop.active {
+    display: block;
+    opacity: 1;
   }
 
   /* Content area adjustments */

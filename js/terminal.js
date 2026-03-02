@@ -40,6 +40,9 @@ function initTerminal() {
   // Add resize listener for responsive behavior
   window.addEventListener('resize', updateMobileSidebarState);
   
+  // Initialize swipe gestures for mobile
+  initSwipeGestures();
+  
   // Start real-time API updates if available
   if (window.startRealTimeUpdates) {
     startRealTimeUpdates();
@@ -58,6 +61,80 @@ function updateMobileSidebarState() {
     sidebar.classList.remove('mobile-hidden');
     mainContainer.classList.remove('sidebar-hidden');
   }
+}
+
+// ============ SWIPE GESTURES FOR MOBILE ============
+function initSwipeGestures() {
+  // Only enable on mobile devices
+  if (window.innerWidth >= 768) return;
+
+  const contentArea = document.getElementById('content-area');
+  if (!contentArea) return;
+
+  let startX, startY, endX, endY;
+  let isTracking = false;
+
+  // Define swipeable screens in logical order
+  const swipeableScreens = [
+    'dashboard',
+    'pm', 
+    'elections',
+    'parties',
+    'events',
+    'parliament',
+    'search'
+  ];
+
+  function getCurrentScreenIndex() {
+    return swipeableScreens.indexOf(state.currentScreen);
+  }
+
+  contentArea.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    isTracking = true;
+  }, { passive: true });
+
+  contentArea.addEventListener('touchmove', (e) => {
+    if (!isTracking) return;
+    endX = e.touches[0].clientX;
+    endY = e.touches[0].clientY;
+  }, { passive: true });
+
+  contentArea.addEventListener('touchend', (e) => {
+    if (!isTracking) return;
+    isTracking = false;
+
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Minimum swipe distance and ensure horizontal swipe dominates
+    if (absDeltaX < 50 || absDeltaY > absDeltaX) return;
+
+    const currentIndex = getCurrentScreenIndex();
+    if (currentIndex === -1) return; // Current screen not swipeable
+
+    let nextScreen;
+    if (deltaX > 0) {
+      // Swipe right - go to previous screen
+      const prevIndex = currentIndex - 1;
+      if (prevIndex >= 0) {
+        nextScreen = swipeableScreens[prevIndex];
+      }
+    } else {
+      // Swipe left - go to next screen
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < swipeableScreens.length) {
+        nextScreen = swipeableScreens[nextIndex];
+      }
+    }
+
+    if (nextScreen) {
+      navigateTo(nextScreen);
+    }
+  });
 }
 
 // ============ CLOCK ============
@@ -236,14 +313,19 @@ function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const mainContainer = document.getElementById('main-container');
   const toggleBtn = document.getElementById('sidebar-toggle');
+  const backdrop = document.getElementById('sidebar-backdrop');
 
   if (sidebar.classList.contains('mobile-hidden')) {
+    // Show sidebar
     sidebar.classList.remove('mobile-hidden');
     mainContainer.classList.remove('sidebar-hidden');
-    toggleBtn.innerHTML = '<span style="color:#ff6600;">☰</span> HIDE';
+    if (backdrop) backdrop.classList.add('active');
+    toggleBtn.innerHTML = '<span style="color:#ff6600;">✕</span> CLOSE';
   } else {
+    // Hide sidebar
     sidebar.classList.add('mobile-hidden');
     mainContainer.classList.add('sidebar-hidden');
+    if (backdrop) backdrop.classList.remove('active');
     toggleBtn.innerHTML = '<span style="color:#ff6600;">☰</span> MENU';
   }
 }
@@ -323,7 +405,7 @@ function renderDashboard() {
       </div>
 
       <!-- MAIN 3-COLUMN GRID -->
-      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; flex:1; gap:1px; min-height:0; overflow:hidden;">
+      <div class="dashboard-main-grid" style="display:grid; grid-template-columns:1fr 1fr 1fr; flex:1; gap:1px; min-height:0; overflow:hidden;">
 
         <!-- COL 1: Prime Ministers -->
         <div class="panel">
@@ -358,7 +440,7 @@ function renderDashboard() {
         </div>
 
         <!-- COL 2: Recent Events + Parliament -->
-        <div style="display:flex;flex-direction:column;gap:1px;">
+        <div class="dashboard-col2" style="display:flex;flex-direction:column;gap:1px;">
           <!-- Parliament Snapshot -->
           <div class="panel" style="flex:0 0 auto;">
             <div class="panel-header">
@@ -420,7 +502,7 @@ function renderDashboard() {
       </div>
 
       <!-- BOTTOM ROW -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; flex-shrink:0;">
+      <div class="dashboard-bottom-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1px; flex-shrink:0;">
         <!-- Parties -->
         <div class="panel">
           <div class="panel-header">
